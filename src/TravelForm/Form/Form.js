@@ -109,7 +109,6 @@ class Form extends Component {
     }
 
     dataHandler = (event) =>{
-        event.preventDefault()
         const formData = {};
         for(let formElement in this.state.TravelForm){
             formData[formElement] = this.state.TravelForm[formElement].value;
@@ -186,7 +185,10 @@ class Form extends Component {
                             changed = {(event) =>this.inputChangeHandler(event, element.id)}/>
                     ))
                 }
-                <button className='Success' disabled={!this.state.formIsValid}>CONFIRM</button>
+                <button style={{margin: '20px auto',
+                                fontWeight: 'bold',
+                                fontSize: 'larger'}}  
+                    disabled={!this.state.formIsValid}>CONFIRM</button>
             </form>
         )
 
