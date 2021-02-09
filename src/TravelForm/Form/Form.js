@@ -61,8 +61,7 @@ class Form extends Component {
                     options:[
                         {id:'option1', value:'jass', displayValue:'Jass'},
                         {id:'option2', value:'classical', displayValue:'Classical'},
-                        {id:'option3', value:'pop', displayValue:'Pop'},
-                        
+                        {id:'option3', value:'pop', displayValue:'Pop'},  
                     ]
                 },
                 value:[],
