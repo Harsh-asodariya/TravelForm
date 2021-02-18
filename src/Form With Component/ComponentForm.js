@@ -4,6 +4,7 @@ import Select from '../Form Components/Select/select';
 import Checkbox from '../Form Components/Checkbox/checkbox';
 import Radio from '../Form Components/Radio/radio';
 import Textarea from '../Form Components/Textarea/textarea';
+import Dropzone from '../Form Components/Dropzone/dropzone';
 
 class ComponentFrom extends Component {
     state = {
@@ -14,12 +15,14 @@ class ComponentFrom extends Component {
             music: [],
             delivery: '',
             address: '',
+            droppdedFile: null
         },
         formIsValid: {
             name: false,
             email: false,
             delivery: false,
             address: false,
+            droppdedFile: false
         },
     }
 
@@ -47,13 +50,36 @@ class ComponentFrom extends Component {
         return formValid;
     }
 
+    dropzoneSubmitHandler = (file) => {
+        let updatedState = {
+            ...this.state.formdata
+        }
+        updatedState.droppdedFile = file
+        let check
+        if (file !== null) {
+            check = true
+        } else {
+            check = false
+        }
+        this.validationHandler('droppdedFile', check)
+        this.setState({ formdata: updatedState })
+    }
+
     inputChangeHandler = (event) => {
-        let val = event.target.id
+        let val
+        if (event.value) {
+            val = event.value
+        } else {
+            val = event.target.id
+        }
         if (val === 'option1' || val === 'option2' || val === 'option3') {
             val = 'music'
         }
         if (val === 'radio1' || val === 'radio2' || val === 'radio3') {
             val = 'delivery'
+        }
+        if (val === 'tesla' || val === 'lamborgini' || val === 'jaguar' || val === 'fortuner') {
+            val = 'car'
         }
         let updatedState = {
             ...this.state.formdata
@@ -67,6 +93,9 @@ class ComponentFrom extends Component {
                 updatedState.music.splice(index, 1)
             }
         }
+        else if (val === 'car') {
+            updatedState[val] = event.value;
+        }
         else {
             updatedState[val] = event.target.value;
         }
@@ -77,17 +106,18 @@ class ComponentFrom extends Component {
     }
 
     submitEventHandler = (event) => {
+        event.preventDefault()
         let valid = {
             ...this.state.formIsValid
         }
-        let validation = true 
-        for(let key in valid){
+        let validation = true
+        for (let key in valid) {
             validation = validation && valid[key]
         }
-        if(validation){
+        if (validation) {
             alert('success')
         }
-        else{
+        else {
             alert('please fill all the field correctly')
         }
         document.getElementById('componentForm').reset()
@@ -101,10 +131,10 @@ class ComponentFrom extends Component {
             { id: 'option3', value: 'pop', displayValue: 'Pop' }
         ];
         let carOptions = [
-            { value: 'tesla', displayValue: 'Tesla' },
-            { value: 'lamborgini', displayValue: 'Lamborgini' },
-            { value: 'jaguar', displayValue: 'Jaguar' },
-            { value: 'fortuner', displayValue: 'Fortuner' }
+            { value: 'tesla', label: 'Tesla' },
+            { value: 'lamborgini', label: 'Lamborgini' },
+            { value: 'jaguar', label: 'Jaguar' },
+            { value: 'fortuner', label: 'Fortuner' }
         ]
         let deliveryOptions = [
             { id: 'radio1', value: 'moderate', displayValue: 'Moderate' },
@@ -120,7 +150,8 @@ class ComponentFrom extends Component {
                     <Checkbox id='music' options={musicOptions} label='Music' value={this.state.formdata.music} changed={this.inputChangeHandler} />
                     <Radio id='delivery' name='delivery' options={deliveryOptions} label='Delivery' value={this.state.formdata.delivery} changed={this.inputChangeHandler} />
                     <Textarea validation="^[A-Za-z0-9'\.\-\s\,]+$" valid={this.validationHandler} label='Address' id='address' type='text' placeholder='Enter Your Address' value={this.state.formdata.address} changed={this.inputChangeHandler} />
-                    <button style={{margin: '20px auto'}} className={'btn btn-primary'} onClick={this.submitEventHandler} >Submit</button>
+                    <Dropzone onsubmit={this.dropzoneSubmitHandler} label='Select your image' />
+                    <button style={{ margin: '20px auto' }} className={'btn btn-primary'} onClick={this.submitEventHandler} >Submit</button>
                 </form>
             </div>
         )
